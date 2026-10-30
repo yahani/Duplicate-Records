@@ -1,0 +1,11 @@
+# Reproduction scenario — run these one at a time from this folder.
+
+python3 demo.py reset
+python3 demo.py start A1 --now "2026-10-26 11:58"
+python3 demo.py start A2 --now "2026-10-26 11:59"
+python3 demo.py finish A2 4 --now "2026-10-26 12:00"
+python3 demo.py finish A1 3 --now "2026-10-26 12:02"
+python3 demo.py export --now "2026-10-26 12:03"
+python3 demo.py correct A1 --start "2026-10-26 11:57" --now "2026-10-26 12:04"
+python3 demo.py export --now "2026-10-26 12:06"
+python3 demo.py duplicates

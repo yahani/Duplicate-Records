@@ -1,0 +1,4 @@
+activities.db
+__pycache__/
+*.zip
+test_results_*.txt
