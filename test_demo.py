@@ -6,17 +6,16 @@ from pathlib import Path
 from unittest import mock
 
 import demo
-import exporter
 
-export = exporter.export_activities
+export = demo.export_activities
 
-# python3 -m unittest -v 2>&1 | tee test_results_before.txt
-# python3 -m unittest -v 2>&1 | tee test_results_after.txt
+# python3 -m unittest -v 2>&1 | sed "s|$HOME|~|g" | tee test_results_before.txt
+# python3 -m unittest -v 2>&1 | sed "s|$HOME|~|g" | tee test_results_after.txt
 
 
 class ExporterTest(unittest.TestCase):
     def setUp(self):
-        self.enterContext(mock.patch('exporter.print_rows'))  # keep test output clean
+        self.enterContext(mock.patch('demo.print_rows'))  # keep test output clean
         self.conn = sqlite3.connect(':memory:')
         self.conn.row_factory = sqlite3.Row
         self.conn.executescript(demo.SCHEMA)
@@ -78,11 +77,11 @@ class ExporterTest(unittest.TestCase):
 
     def test_record_id_is_the_same_in_a_separate_process(self):
         row = {'activity_id': 'A1', 'start_time': '2026-10-26 11:58:00'}
-        script = f'import exporter; print(exporter.record_id({row!r}))'
+        script = f'import demo; print(demo.record_id({row!r}))'
         other = subprocess.run([sys.executable, '-c', script], capture_output=True, text=True, check=True,
                                cwd=Path(__file__).parent).stdout.strip()
 
-        self.assertEqual(other, exporter.record_id(row))
+        self.assertEqual(other, demo.record_id(row))
 
     def test_score_correction_updates_the_existing_record(self):
         self.start('A1', '2026-10-26 11:58:00')
